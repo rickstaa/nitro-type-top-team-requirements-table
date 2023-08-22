@@ -21,7 +21,7 @@ The script fetches weekly season and leaderboard information from the [NitroType
 
 ## Screenshot
 
-![image](https://github.com/rickstaa/nitro-type-show-daily-races/assets/17570430/d42bc612-7b7e-48c3-968d-005b16e242d5)
+![image](https://github.com/rickstaa/nitro-type-top-team-requirements-table/assets/17570430/5606744a-79b7-4278-a23e-8536a69521dd)
 
 ## Bugs and contributions
 
