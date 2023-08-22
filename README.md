@@ -25,4 +25,4 @@ The script fetches weekly season and leaderboard information from the [NitroType
 
 ## Bugs and contributions
 
-If you find a bug or have a suggestion for how to improve the script, please open [an issue](https://github.com/rickstaa/nitro-type-daily-races/issues) or submit a [pull request](https://github.com/rickstaa/nitro-type-daily-races/compare) on GitHub. We welcome contributions from the community and appreciate your feedback 🚀. Please consult the [contribution guidelines](CONTRIBUTING.md) for more information.
+If you find a bug or have a suggestion for how to improve the script, please open [an issue](https://github.com/rickstaa/nitro-type-top-team-requirements-table/issues) or submit a [pull request](https://github.com/rickstaa/nitro-type-top-team-requirements-table/compare) on GitHub. We welcome contributions from the community and appreciate your feedback 🚀. Please consult the [contribution guidelines](CONTRIBUTING.md) for more information.
