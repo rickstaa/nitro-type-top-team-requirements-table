@@ -12,11 +12,11 @@
 
 /**
  * Fetches team stats from the NitroType API or from local storage.
- * @param {number} teamId - The ID of the team to fetch stats for.
+ * @param {number} teamPageTag - The tag of the team to fetch stats for.
  * @returns {Promise<Object>} - A promise that resolves to an object containing the
  * team stats. Uses cached stats if they are less than 20 minutes old.
  */
-const fetchTeamStats = async (teamId) => {
+const fetchTeamStats = async (teamPageTag) => {
   try {
     const teamStats = JSON.parse(localStorage.getItem("teamStats"));
     if (teamStats && Date.now() - teamStats.timestamp < 20 * 60 * 1000) {
@@ -25,7 +25,7 @@ const fetchTeamStats = async (teamId) => {
     } else {
       // Retrieve the team stats from the NitroType API.
       const response = await fetch(
-        `https://www.nitrotype.com/api/v2/teams/${teamId}`
+        `https://www.nitrotype.com/api/v2/teams/${teamPageTag}`
       );
 
       // Throw an error if the response is not successful.
@@ -184,12 +184,19 @@ const waitForElm = (selector) => {
   "use strict";
 
   // Get the team ID from the URL.
-  const teamID = window.location.href.split("/")[4];
+  const teamPageTag = window.location.href.split("/")[4];
+
+  // Return if user is not on its own team page.
+  const userTeamTAG = JSON.parse(JSON.parse(localStorage.getItem("persist:nt")).user).tag
+  if (userTeamTAG !== teamPageTag) {
+    return;
+  }
+
+  // Get the team stats from the NitroType API.
   let memberCount;
   let seasonRaces;
   try {
-    // Retrieve the team stats from the NitroType API.
-    const { results } = await fetchTeamStats(teamID);
+    const { results } = await fetchTeamStats(teamPageTag);
     memberCount = results.info.members;
     seasonRaces = results.stats.find((stat) => stat.board === "season")?.played;
   } catch (error) {
