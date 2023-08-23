@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Nitro Type - Top Team Requirements Table
 // @namespace    https://github.com/rickstaa/nitro-type-top-team-requirements-table
-// @version      1.0.0
+// @version      1.1.0
 // @description  Display top team races and points requirements for weekly and season leaderboards on Nitro Type team pages.
 // @author       Rick Staa
 // @match        *://*.nitrotype.com/team/*
