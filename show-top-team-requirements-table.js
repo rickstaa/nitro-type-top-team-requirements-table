@@ -187,7 +187,9 @@ const waitForElm = (selector) => {
   const teamPageTag = window.location.href.split("/")[4];
 
   // Return if user is not on its own team page.
-  const userTeamTAG = JSON.parse(JSON.parse(localStorage.getItem("persist:nt")).user).tag
+  const userTeamTAG = JSON.parse(
+    JSON.parse(localStorage.getItem("persist:nt")).user
+  ).tag;
   if (userTeamTAG !== teamPageTag) {
     return;
   }
@@ -202,6 +204,14 @@ const waitForElm = (selector) => {
   } catch (error) {
     console.error(`Error retrieving team stats: ${error}`);
   }
+
+  // Retrieve current season information.
+  const seasonInfo = NTGLOBALS.ACTIVE_SEASONS.find((s) => {
+    const now = Date.now();
+    return now >= s.startStamp * 1e3 && now <= s.endStamp * 1e3;
+  });
+  const DAYS_LEFT_IN_SEASON =
+    Math.abs(seasonInfo.endStamp * 1000 - Date.now()) / (1000 * 60 * 60 * 24);
 
   // Retrieve the weekly and season leaderboards from the NitroType API.
   let weeklyLeaderBoardInfo, seasonLeaderBoardInfo;
@@ -247,7 +257,7 @@ const waitForElm = (selector) => {
   // Calculate required daily member races for the season leaderboard.
   for (const [key, value] of Object.entries(seasonTopInfo)) {
     seasonTopInfo[key].dailyMemberRaces = Math.ceil(
-      (value.played - seasonRaces) / memberCount
+      (value.played - seasonRaces) / DAYS_LEFT_IN_SEASON / memberCount
     );
   }
 
@@ -289,11 +299,11 @@ const waitForElm = (selector) => {
       topInfoTableBodyRow.appendChild(racesColumn);
 
       // Add number of points earned to the table row.
-      const experienceColumn = document.createElement("td");
-      experienceColumn.className = "table-cell table-cell--points";
-      experienceColumn.setAttribute("colspan", "3");
-      experienceColumn.innerText = value.points.toLocaleString();
-      topInfoTableBodyRow.appendChild(experienceColumn);
+      const pointsColumn = document.createElement("td");
+      pointsColumn.className = "table-cell table-cell--points";
+      pointsColumn.setAttribute("colspan", "3");
+      pointsColumn.innerText = value.points.toLocaleString();
+      topInfoTableBodyRow.appendChild(pointsColumn);
 
       // Add required daily member races to the table row.
       const dailyMemberRacesColumn = document.createElement("td");
@@ -381,7 +391,7 @@ const waitForElm = (selector) => {
 
       // Update the table footer span if it exists.
       if (tableFooterSpan) {
-        tableFooterSpan.innerText = `* Calculated for ${memberCount} members and ${seasonRaces} season races.`;
+        tableFooterSpan.innerText = `* Estimation was calculated for ${memberCount} members and ${seasonRaces} season races.`;
       }
     });
 
@@ -413,7 +423,7 @@ const waitForElm = (selector) => {
 
       // Update the table footer span if it exists.
       if (tableFooterSpan) {
-        tableFooterSpan.innerText = `* Calculated for ${memberCount} members.`;
+        tableFooterSpan.innerText = `* Estimation was calculated for ${memberCount} members.`;
       }
     });
 
@@ -448,11 +458,11 @@ const waitForElm = (selector) => {
     racesHeader.innerText = "Races";
     racesHeader.setAttribute("colspan", "3");
 
-    // Create the experience header .
-    const experienceHeader = document.createElement("th");
-    experienceHeader.className = "table-cell table-cell--points";
-    experienceHeader.innerText = "Experience";
-    experienceHeader.setAttribute("colspan", "3");
+    // Create the points header .
+    const pointsHeader = document.createElement("th");
+    pointsHeader.className = "table-cell table-cell--points";
+    pointsHeader.innerText = "Points";
+    pointsHeader.setAttribute("colspan", "3");
 
     // Create the daily member races header.
     const dailyMemberRacesHeader = document.createElement("th");
@@ -463,7 +473,7 @@ const waitForElm = (selector) => {
     // Add table elements to the table.
     headerRow.appendChild(topPositionHeader);
     headerRow.appendChild(racesHeader);
-    headerRow.appendChild(experienceHeader);
+    headerRow.appendChild(pointsHeader);
     headerRow.appendChild(dailyMemberRacesHeader);
     header.appendChild(headerRow);
     table.appendChild(header);
@@ -483,7 +493,7 @@ const waitForElm = (selector) => {
     const footerCellSpan = document.createElement("span");
     footerCellSpan.className =
       "tsxs tc-ts tsi table-footer--leaderboard--requirements--span";
-    footerCellSpan.innerText = `* Calculated for ${memberCount} members.`;
+    footerCellSpan.innerText = `* Estimation was calculated for ${memberCount} members.`;
 
     // Add the table footer to the table.
     footerCell.appendChild(footerCellSpan);
